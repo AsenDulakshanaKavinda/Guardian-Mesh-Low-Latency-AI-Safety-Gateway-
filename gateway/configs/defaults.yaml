@@ -1,0 +1,10 @@
+port: 8080
+database_url: "postgres://localhost/guardian_mesh"
+debug_mode: true
+
+# You can even have nested structures
+security:
+  max_retries: 5
+  allow_list:
+    - "127.0.0.1"
+    - "192.168.1.1"
