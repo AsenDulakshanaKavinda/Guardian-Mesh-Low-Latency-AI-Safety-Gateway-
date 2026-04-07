@@ -6,7 +6,7 @@ fn main() {
     let settings = APP_CONFIG.as_ref().expect("Failed to load configuration");
 
     // tracing::info!("new log");
-    tracing::info!("the port: {}", settings.port);
+    tracing::info!("Starting gateway with settings: {:?}", settings);
     
 }
 
