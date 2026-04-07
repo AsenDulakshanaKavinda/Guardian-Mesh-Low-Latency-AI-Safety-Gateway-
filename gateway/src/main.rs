@@ -1,15 +1,13 @@
 
 mod utils;
-
-
+use crate::utils::config::APP_CONFIG;
 fn main() {
     let _guard = utils::logging::init_logging();
-    tracing::info!("new log");
-    tracing::debug!("debug log");
-    tracing::warn!("warn log");
-    tracing::error!("error log");
-    tracing::trace!("trace log");
-    println!("hello world!")
+    let settings = APP_CONFIG.as_ref().expect("Failed to load configuration");
+
+    // tracing::info!("new log");
+    tracing::info!("Starting gateway with settings: {:?}", settings);
+    
 }
 
                 

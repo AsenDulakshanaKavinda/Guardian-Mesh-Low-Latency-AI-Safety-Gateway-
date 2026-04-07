@@ -2,6 +2,8 @@ use tracing_appender::non_blocking::{WorkerGuard};
 use tracing_appender::rolling;
 use tracing_subscriber::{fmt, prelude::*, EnvFilter};
 
+use crate::utils::config::APP_CONFIG;
+
 /// Initializes logging with both console and file outputs. The console output is human-readable, 
 /// while the file output is in JSON format for easier parsing. The log files are rotated weekly and stored
 /// in the "logs" directory with the name "app.log". The function returns a `WorkerGuard` to ensure that
@@ -21,7 +23,12 @@ use tracing_subscriber::{fmt, prelude::*, EnvFilter};
 /// - The console output does not include the target field to reduce clutter, while the file output includes all log information in JSON format for better analysis and monitoring.
 
 pub fn init_logging() -> WorkerGuard {
-    let file_appender = rolling::weekly("logs", "app.log");
+    let settings = APP_CONFIG.as_ref().expect("Failed to load configuration");
+
+    let file_appender = rolling::weekly(
+        &settings.logging.log_dir, 
+        &settings.logging.log_file, 
+    );
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
 
     let console_layer = fmt::layer()

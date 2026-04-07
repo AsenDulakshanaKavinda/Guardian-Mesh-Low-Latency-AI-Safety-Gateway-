@@ -4,10 +4,11 @@ import logging
 from logging.handlers import RotatingFileHandler
 from pythonjsonlogger import jsonlogger
 from pathlib import Path
+from .handle_config import config
 
 
-LOG_DIR = "logs"
-LOG_FILE = "app.log"
+LOG_DIR = config.logging.log_dir
+LOG_FILE = config.logging.log_file
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 
 
