@@ -1,13 +1,30 @@
 
-mod utils;
+mod utils; 
+mod handlers;
+mod routes;
+
+
+use crate::routes::chat::create_app;
 use crate::utils::config::APP_CONFIG;
-fn main() {
-    let _guard = utils::logging::init_logging();
+use crate::utils::logging::init_logging;
+
+#[tokio::main]
+async fn main() {
+    let _guard = init_logging();
     let settings = APP_CONFIG.as_ref().expect("Failed to load configuration");
 
-    // tracing::info!("new log");
-    tracing::info!("Starting gateway with settings: {:?}", settings);
-    
+    let app = create_app();
+
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+        .await
+        .expect("Failed to bind tcp listener.");
+
+    tracing::info!("Server running on http://localhost:3000");
+
+    axum::serve(listener, app)
+        .await
+        .expect("Failed to start server");
+
 }
 
                 
