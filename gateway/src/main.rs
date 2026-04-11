@@ -2,6 +2,7 @@
 mod utils; 
 mod handlers;
 mod routes;
+mod services;
 
 
 use crate::routes::chat::create_app;
