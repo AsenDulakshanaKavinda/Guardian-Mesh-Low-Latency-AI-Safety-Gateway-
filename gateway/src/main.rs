@@ -5,14 +5,18 @@ mod routes;
 mod services;
 
 
+
+
 use crate::routes::chat::create_app;
 use crate::utils::config::APP_CONFIG;
 use crate::utils::logging::init_logging;
 
+
+
 #[tokio::main]
 async fn main() {
     let _guard = init_logging();
-    let settings = APP_CONFIG.as_ref().expect("Failed to load configuration");
+    let _settings = APP_CONFIG.as_ref().expect("Failed to load configuration");
 
     let app = create_app();
 

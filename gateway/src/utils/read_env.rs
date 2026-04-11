@@ -1,5 +1,4 @@
-use std::env;
-
+use std::env::{self, VarError};
 use dotenvy::dotenv;
 
 // Reads an environment variable from the .env file or the system environment variables.
@@ -12,8 +11,8 @@ use dotenvy::dotenv;
 // ```
 // let database_url = read_env("DATABASE_URL").expect("DATABASE_URL must be set");
 // ```  
-pub fn read_env(key: &str) -> Result<String, env::VarError> {
-    dotenv().ok();
 
-    env::var(key)
+pub async fn read_env(key: &str) -> Result<String, VarError> {
+    dotenv().ok();
+    Ok(env::var(key)?)
 }
