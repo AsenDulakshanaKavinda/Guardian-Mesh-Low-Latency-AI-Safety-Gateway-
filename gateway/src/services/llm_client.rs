@@ -1,6 +1,9 @@
+// External Crates
+use gemini_rust::Gemini;
 
-use gemini_rust::{Gemini};
+// Internal Modules
 use crate::utils::read_env::read_env;
+
 
 // Loads the Gemini client by reading the API key from the environment variables.
 // # Returns

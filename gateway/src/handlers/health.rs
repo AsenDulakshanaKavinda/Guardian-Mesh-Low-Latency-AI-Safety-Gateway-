@@ -1,4 +1,9 @@
-use axum::{Json, http::StatusCode, response::IntoResponse};
+// External Crates
+use axum::Json;
+use axum::http::StatusCode;
+use axum::response::IntoResponse;
+
+// Internal Modules
 use crate::handlers::schemas::HealthResponse;
 
 // This is a simple handler for the health check endpoint.

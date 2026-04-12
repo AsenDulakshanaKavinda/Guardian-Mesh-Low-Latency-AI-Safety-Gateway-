@@ -1,8 +1,11 @@
+// External Crates
+use axum::Router;
+use axum::routing::get;
 use axum::routing::post;
-use axum::{Router, routing::get};
 
-use crate::handlers::home::home;
+// Internal Modules
 use crate::handlers::health::health_check;
+use crate::handlers::home::home;
 use crate::handlers::invoke::invoking;
 
 // This module defines the routes for the chat application and creates the Axum router.
