@@ -1,15 +1,21 @@
 
 use axum::{Json, http::StatusCode, response::IntoResponse};
-// use mistralai_client::v1::{chat::{ChatMessage, ChatMessageRole, ChatParams}, client::Client, constants::Model};
-
 use crate::{handlers::schemas::{InvokeRequest, InvokeResponse}, services::llm_service::invoke};
 
 
-
+// Handles the invocation of the LLM service by processing the incoming request, invoking the service, and returning the appropriate response.
+// # Arguments
+// * `Json(payload): Json<InvokeRequest>` - The incoming request containing the user prompt.
+// # Returns
+// * `impl IntoResponse` - The response containing the status, message, original prompt, and the generated result if successful, or an error message if the invocation fails.
+// # Example
+// ```
+// let response = invoking(Json(InvokeRequest { prompt: "What is Rust?".to_string() })).await.into_response();
+// ```  
 pub async fn invoking(Json(payload): Json<InvokeRequest>) -> impl IntoResponse {
     let user_prompt = payload.prompt;
 
-    let result = match invoke().await {
+    let result = match invoke(&user_prompt).await {
         Ok(res) => res,
         Err(e) => {
             tracing::error!("LLM Error: {}", e);
@@ -37,19 +43,4 @@ pub async fn invoking(Json(payload): Json<InvokeRequest>) -> impl IntoResponse {
         }),
     ).into_response()
 }
-
-
-// Invokes the LLM (Language Model) to generate a response based on a user message.
-// # Arguments
-// * `prompt` - A string slice that holds the user's message or prompt to be sent to the LLM for generating a response.
-// # Returns
-// * `Ok(String)` - The generated response from the LLM if the invocation is successful.
-// * `Err(Box<dyn std::error::Error>)` - An error if the LLM invocation fails, including errors from client creation or the chat method.
-// # Example
-// ```
-// let response = invoke_llm().expect("Failed to invoke LLM");
-// println!("LLM Response: {}", response);
-// ```
-
-
 

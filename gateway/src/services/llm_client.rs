@@ -19,7 +19,4 @@ pub async fn load_gemini_client() -> Result<Gemini, Box<dyn std::error::Error>> 
     // create a client
     let client = Gemini::new(api_key)?;
     Ok(client)
-
-
-
 }
