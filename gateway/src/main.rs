@@ -1,8 +1,7 @@
-
 mod utils; 
 mod handlers;
 mod routes;
-
+mod services;
 
 use crate::routes::chat::create_app;
 use crate::utils::config::APP_CONFIG;
@@ -14,12 +13,15 @@ async fn main() {
     let settings = APP_CONFIG.as_ref().expect("Failed to load configuration");
 
     let app = create_app();
+    let addr = &settings.host_config.addr;
+    let host = &settings.host_config.host;
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+
+    let listener = tokio::net::TcpListener::bind(addr.to_string())
         .await
         .expect("Failed to bind tcp listener.");
 
-    tracing::info!("Server running on http://localhost:3000");
+    tracing::info!("Server running on {}", host.to_string());
 
     axum::serve(listener, app)
         .await

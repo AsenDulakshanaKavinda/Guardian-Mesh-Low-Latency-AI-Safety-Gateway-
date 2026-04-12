@@ -1,8 +1,8 @@
-port: 8080
-database_url: "postgres://localhost/guardian_mesh"
-debug_mode: true
 
-# You can even have nested structures
 logging:
   log_file: app.log
   log_dir: logs
+
+host_config:
+  host: http://localhost:3000
+  addr: 0.0.0.0:3000
