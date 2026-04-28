@@ -18,7 +18,6 @@ class TrainingDataset:
             )
         except Exception as e:
             raise RuntimeError(f"Error while saving the dataset: {str(e)}")
-    
 
     def get_dataset(self, ):
         if not self.dataset_dict:

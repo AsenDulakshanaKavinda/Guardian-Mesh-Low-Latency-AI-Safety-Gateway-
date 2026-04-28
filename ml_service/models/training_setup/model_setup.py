@@ -32,6 +32,7 @@ class TrainingModel:
                 model_name = self.model_name
             )
 
+
     # set trainable parameters
     def set_trainable_parameters(self, params: list) -> None:
         for name, param in self.model.named_parameters():
@@ -40,11 +41,18 @@ class TrainingModel:
             else:
                 param.requires_grad = False
 
+
     def get_trainable_model(self) -> AutoModelForSequenceClassification:
         if self.model is None:
             raise ValueError("Model not loaded. Please call load_base_model() first.")
         return self.model
 
+
+    def get_tokenizer(self) -> AutoTokenizer:
+        if self.tokenizer is None:
+            raise ValueError("Tokenizer not loaded. Please call load_base_model() first.")
+        return self.tokenizer
+    
     
 
         
