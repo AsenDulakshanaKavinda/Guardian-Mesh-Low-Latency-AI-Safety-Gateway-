@@ -9,8 +9,7 @@ members = [".", "migration"]
 [dependencies]
 migration = { path = "migration" }
 
-[dependencies]
-sea-orm = { version = "2.0.0-rc", features = [..] }
+sea-orm = { version = "2.0.0-rc.38", features = ["sqlx-postgres", "runtime-tokio-rustls"] }
 
 axum = "0.8.9"
 serde_json = "1.0.149"
