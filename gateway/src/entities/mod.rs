@@ -2,4 +2,5 @@
 
 pub mod prelude;
 
+pub mod bad_prompt;
 pub mod user;

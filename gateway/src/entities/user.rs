@@ -2,7 +2,6 @@
 
 use sea_orm::entity::prelude::*;
 
-#[sea_orm::model]
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "user")]
 pub struct Model {
@@ -13,6 +12,18 @@ pub struct Model {
     pub email: String,
     pub password: String,
     pub created_at: DateTime,
+}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(has_many = "super::bad_prompt::Entity")]
+    BadPrompt,
+}
+
+impl Related<super::bad_prompt::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::BadPrompt.def()
+    }
 }
 
 impl ActiveModelBehavior for ActiveModel {}

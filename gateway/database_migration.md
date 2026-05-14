@@ -4,3 +4,5 @@ sea-orm-cli migrate init
 
 
 sea-orm-cli migrate fresh
+
+sea-orm-cli generate entity -u DATABASE_URL -o src/entities

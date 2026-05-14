@@ -4,6 +4,7 @@ mod routes;
 mod handlers;
 mod utils;
 mod models;
+mod entities;
 
 
 
