@@ -18,3 +18,14 @@ pub struct CreateUserModel {
     pub email: String,
     pub password: String,
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct FetchUserModel {
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct UpdateUserModel {
+    pub username: String,
+}
