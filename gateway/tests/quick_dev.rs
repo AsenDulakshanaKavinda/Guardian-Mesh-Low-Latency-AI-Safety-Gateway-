@@ -7,9 +7,9 @@ use serde_json::json;
 #[tokio::test]
 async fn quick_dev() -> Result<()> {
     let hc = httpc_test::new_client("http://localhost:3000")?;
-    let temporary_id = "9e330c7c-ce0f-45ab-96cb-814c9322a846
-";
-    let n = 9;
+    let temporary_id_update = "0ef47597-a404-4c5c-b3cd-5c5630cc5950";
+    let temporary_id_delete = "a33156e9-4e4f-46eb-bc66-629f23264ec5";
+    let n = 14;
 
     // 1. CREATE USER
     let create_user_success = hc.do_post(
@@ -36,9 +36,11 @@ async fn quick_dev() -> Result<()> {
     
 
     // 2. FETCH USER
-    /* 
-    let fetch_user_success = hc.do_put(
-        &format!("/user/update/{}", temporary_id),
+    let fetch_user_success = hc.do_post(
+        "/user/fetch",
+        json!({
+            "email": "demo6gmail.com"
+        })
     ).await;
 
     match fetch_user_success {
@@ -57,9 +59,9 @@ async fn quick_dev() -> Result<()> {
 
     // 3. UPDATE USER (Switched to DO_PUT)
     let update_user_success = hc.do_put(
-        &format!("/user/update/{}", temporary_id),
+        &format!("/user/update/{}", temporary_id_update),
         json!({
-            "username": "demoupdated",
+            "username": "demoupdated02",
         })
     ).await;
 
@@ -74,11 +76,11 @@ async fn quick_dev() -> Result<()> {
             return Err(err.into());
         }
     }
-    */
+
 
     // 4. DELETE USER (Switched to DO_DELETE and removed unnecessary Json payload)
     let delete_user_success = hc.do_delete(
-        &format!("/user/delete/{}", temporary_id)
+        &format!("/user/delete/{}", temporary_id_delete)
     ).await;
 
     match delete_user_success {

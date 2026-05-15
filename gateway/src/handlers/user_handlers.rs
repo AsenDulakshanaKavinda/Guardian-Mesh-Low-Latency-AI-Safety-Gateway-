@@ -69,9 +69,13 @@ pub async fn create_user(
 // fetch user
 pub async fn fetch_user(
     Extension(db): Extension<DatabaseConnection>,
-    Path(uuid): Path<Uuid>,
+    Json(user_data): Json<FetchUserModel>
+
 ) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
-    let user = entities::user::Entity::find_by_id(uuid)
+    let user = entities::user::Entity::find()
+        .filter(
+            entities::user::Column::Email.eq(user_data.email.clone())
+        )
         .one(&db)
         .await
         .map_err(|e| AppError::Internal(e.into()))?
