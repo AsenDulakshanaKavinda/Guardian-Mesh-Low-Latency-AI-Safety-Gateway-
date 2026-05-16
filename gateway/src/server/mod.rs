@@ -1,6 +1,8 @@
 
 use std::net::SocketAddr;
-use crate::routers::app_routes;
+
+use crate::routes::main_route;
+
 
 pub async fn server() {
 
@@ -13,10 +15,11 @@ pub async fn server() {
         .unwrap();
 
     // main routes
-    let main_routes = app_routes();
+    let main_routes = main_route().await;
 
     println!(">>> Listening on - {addr} \n");
 
+    // start server
     axum::serve(listener, main_routes)
         .await
         .unwrap();
