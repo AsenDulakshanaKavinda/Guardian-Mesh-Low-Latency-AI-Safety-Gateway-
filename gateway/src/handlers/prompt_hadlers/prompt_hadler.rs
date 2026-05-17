@@ -4,7 +4,11 @@ use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::{entities, models::APIResponse, utils::{errors::AppError, guards::CurrentUser}};
+use crate::{
+    entities,
+    models::APIResponse,
+    utils::{errors::AppError, guards::CurrentUser},
+};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PromptData {
@@ -16,20 +20,17 @@ pub struct PromptData {
 pub struct BadPromptResponse {
     prompt: String,
     prompt_type: String,
-    reqested_at: NaiveDateTime
+    reqested_at: NaiveDateTime,
 }
 
 pub async fn insert_prompt(
     Extension(current_user): Extension<CurrentUser>,
     Extension(db): Extension<DatabaseConnection>,
-    Json(prompt_data): Json<PromptData>
+    Json(prompt_data): Json<PromptData>,
 ) -> Result<(StatusCode, Json<APIResponse<BadPromptResponse>>), AppError> {
-
-
     let user_id = current_user.0.user_id;
-    let prompt_id =  Uuid::new_v4().to_string(); // todo - get the prompt id from the user request
+    let prompt_id = Uuid::new_v4().to_string(); // todo - get the prompt id from the user request
     let requested_at = Utc::now().naive_utc();
-
 
     let new_prompt = entities::bad_prompt::ActiveModel {
         user_id: Set(user_id.to_owned()),
@@ -48,7 +49,7 @@ pub async fn insert_prompt(
     let response = BadPromptResponse {
         prompt: prompt_data.prompt,
         prompt_type: prompt_data.prompt_type,
-        reqested_at: requested_at
+        reqested_at: requested_at,
     };
 
     Ok((
@@ -59,8 +60,4 @@ pub async fn insert_prompt(
             data: Some(response),
         }),
     ))
-
-
-
-
 }

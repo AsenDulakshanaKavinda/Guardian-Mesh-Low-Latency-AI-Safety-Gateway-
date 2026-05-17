@@ -1,15 +1,20 @@
 use axum::{Extension, Json, http::StatusCode};
 use chrono::Utc;
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use sea_orm::{
+    ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
+};
 use serde::Deserialize;
 use uuid::Uuid;
 use validator::Validate;
 
-use crate::{entities, handlers::auth_handlers::AuthResponse, utils::{errors::AppError, jwt::create_jwt, password::hash_password}};
+use crate::{
+    entities,
+    handlers::auth_handlers::AuthResponse,
+    utils::{errors::AppError, jwt::create_jwt, password::hash_password},
+};
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct RegisterModel {
-
     #[validate(length(min = 3))]
     pub username: String,
 
@@ -20,12 +25,10 @@ pub struct RegisterModel {
     pub password: String,
 }
 
-
 pub async fn register_user(
     Extension(db): Extension<DatabaseConnection>,
     Json(user_data): Json<RegisterModel>,
 ) -> Result<(StatusCode, Json<AuthResponse>), AppError> {
-
     let existing_user = entities::user::Entity::find()
         .filter(entities::user::Column::Email.eq(user_data.email.clone()))
         .one(&db)
@@ -53,12 +56,7 @@ pub async fn register_user(
         .await
         .map_err(|_| AppError::InternalServerError)?;
 
-    let token = create_jwt(user_id.to_string())
-        .map_err(|_| AppError::InternalServerError)?;
+    let token = create_jwt(user_id.to_string()).map_err(|_| AppError::InternalServerError)?;
 
-    Ok((
-        StatusCode::CREATED,
-        Json(AuthResponse { token }),
-    ))
-
+    Ok((StatusCode::CREATED, Json(AuthResponse { token })))
 }
