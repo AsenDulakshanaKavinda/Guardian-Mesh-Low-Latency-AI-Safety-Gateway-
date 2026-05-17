@@ -1,6 +1,5 @@
-
 use chrono::NaiveDateTime;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use validator::Validate;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -9,12 +8,11 @@ pub struct UserModel {
     pub username: String,
     pub email: String,
     pub password: String,
-    pub created_at: NaiveDateTime
+    pub created_at: NaiveDateTime,
 }
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct CreateUserModel {
-
     #[validate(length(min = 3, max = 30))]
     pub username: String,
 
@@ -25,7 +23,7 @@ pub struct CreateUserModel {
     pub password: String,
 }
 
-/* 
+/*
 #[derive(Serialize, Deserialize)]
 pub struct CreateUserModel {
     pub username: String,

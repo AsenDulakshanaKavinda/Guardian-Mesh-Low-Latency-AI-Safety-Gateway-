@@ -1,32 +1,31 @@
-
+use crate::{
+    entities::{self, user},
+    models::{
+        APIResponse, UserResponse,
+        user_models::{CreateUserModel, FetchUserModel, UpdateUserModel},
+    },
+    utils::{errors::AppError, password::hash_password},
+};
 use axum::{Extension, Json, extract::Path, http::StatusCode};
 use chrono::Utc;
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
-
+use sea_orm::{
+    ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
+};
 use uuid::Uuid;
 use validator::Validate;
-
-use crate::{entities::{self, user}, models::{APIResponse, UserResponse, user_models::{CreateUserModel, FetchUserModel, UpdateUserModel}}, utils::{errors::AppError, password::hash_password}};
-
 
 // create user
 pub async fn create_user(
     Extension(db): Extension<DatabaseConnection>,
     Json(user_data): Json<CreateUserModel>,
 ) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
-
-    user_data
-        .validate()
-        .map_err(|_| AppError::ValidationError);
-
+    let _ = user_data.validate().map_err(|_| AppError::ValidationError);
 
     let existing_user = entities::user::Entity::find()
-    .filter(
-        entities::user::Column::Email.eq(user_data.email.clone())
-    )
-    .one(&db)
-    .await
-    .map_err(|e| AppError::Internal(e.into()))?;
+        .filter(entities::user::Column::Email.eq(user_data.email.clone()))
+        .one(&db)
+        .await
+        .map_err(|e| AppError::Internal(e.into()))?;
 
     if existing_user.is_some() {
         return Err(AppError::UserAlreadyExists);
@@ -65,19 +64,15 @@ pub async fn create_user(
             data: Some(response),
         }),
     ))
-
 }
 
 // fetch user
 pub async fn fetch_user(
     Extension(db): Extension<DatabaseConnection>,
-    Json(user_data): Json<FetchUserModel>
-
+    Json(user_data): Json<FetchUserModel>,
 ) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
     let user = entities::user::Entity::find()
-        .filter(
-            entities::user::Column::Email.eq(user_data.email.clone())
-        )
+        .filter(entities::user::Column::Email.eq(user_data.email.clone()))
         .one(&db)
         .await
         .map_err(|e| AppError::Internal(e.into()))?
@@ -100,13 +95,11 @@ pub async fn fetch_user(
     ))
 }
 
-
 pub async fn update_user(
     Extension(db): Extension<DatabaseConnection>,
     Path(uuid): Path<Uuid>,
     Json(user_data): Json<UpdateUserModel>,
 ) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
-
     // validate request
 
     let user = entities::user::Entity::find_by_id(uuid)
@@ -141,12 +134,10 @@ pub async fn update_user(
     ))
 }
 
-
 pub async fn delete_user(
     Extension(db): Extension<DatabaseConnection>,
     Path(uuid): Path<Uuid>,
 ) -> Result<StatusCode, AppError> {
-
     let result = entities::user::Entity::delete_by_id(uuid)
         .exec(&db)
         .await
@@ -158,5 +149,3 @@ pub async fn delete_user(
 
     Ok(StatusCode::NO_CONTENT)
 }
-
-
